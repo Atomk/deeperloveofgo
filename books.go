@@ -48,7 +48,7 @@ func GetAllBooks() map[string]Book {
 	return catalog
 }
 
-func GetAllBooksAsSlice() []Book {
+func GetAllBooksAsSlice(catalog map[string]Book) []Book {
 	// The long way 1
 	// booksSlice := make([]Book, len(catalog))
 	// i := 0
@@ -78,7 +78,7 @@ func GetAllBooksAsSlice() []Book {
 }
 
 // Uses the “comma, ok” pattern.
-func GetBook(ID string) (Book, bool) {
+func GetBook(catalog map[string]Book, ID string) (Book, bool) {
 	// Long way
 	// This works on both slices and maps - they are similar in how they are used,
 	// you can think of a slice as a special case of maps where keys are consecutive
@@ -97,7 +97,7 @@ func GetBook(ID string) (Book, bool) {
 	return book, ok
 }
 
-func AddBook(book Book) error {
+func AddBook(catalog map[string]Book, book Book) error {
 	_, ok := catalog[book.ID]
 	if ok {
 		return fmt.Errorf("a book with ID '%s' already exists in the catalog", book.ID)

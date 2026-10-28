@@ -8,6 +8,23 @@ import (
 	"testing"
 )
 
+func getTestCatalog() map[string]books.Book {
+	return map[string]books.Book{
+		"9788804497882": {
+			ID:     "9788804497882",
+			Title:  "Artemis Fowl",
+			Author: "Eoin Colfer",
+			Copies: 3_000_000,
+		},
+		"8879262920": {
+			ID:     "8879262920",
+			Title:  "Bolle di sapone",
+			Author: "Gianni Rodari",
+			Copies: 100_000,
+		},
+	}
+}
+
 // "BookToString formats book info as string"
 func TestBookToString_FormatsBookInfoAsString(t *testing.T) {
 	t.Parallel()
@@ -27,6 +44,7 @@ func TestBookToString_FormatsBookInfoAsString(t *testing.T) {
 
 func TestGetAllBooksAsSlice_ReturnsCatalogBooks(t *testing.T) {
 	t.Parallel()
+	catalog := getTestCatalog()
 	want := []books.Book{
 		{
 			ID:     "9788804497882",
@@ -42,7 +60,7 @@ func TestGetAllBooksAsSlice_ReturnsCatalogBooks(t *testing.T) {
 		},
 	}
 
-	got := books.GetAllBooksAsSlice()
+	got := books.GetAllBooksAsSlice(catalog)
 	// A slice is an ordered sequence, while the iteration order of maps is not
 	// deterministic, as demonstrated by running this test multiple times without
 	// sorting the result:
@@ -69,13 +87,14 @@ func TestGetAllBooksAsSlice_ReturnsCatalogBooks(t *testing.T) {
 
 func TestGetBook_FindsTheBook(t *testing.T) {
 	t.Parallel()
+	catalog := getTestCatalog()
 	want := books.Book{
 		ID:     "8879262920",
 		Title:  "Bolle di sapone",
 		Author: "Gianni Rodari",
 		Copies: 100_000,
 	}
-	got, ok := books.GetBook(want.ID)
+	got, ok := books.GetBook(catalog, want.ID)
 	if !ok {
 		t.Fatalf("book not found")
 	}
@@ -86,7 +105,8 @@ func TestGetBook_FindsTheBook(t *testing.T) {
 
 func TestGetBook_DoesNotFindTheBook(t *testing.T) {
 	t.Parallel()
-	_, ok := books.GetBook("fake-isbn-1234")
+	catalog := getTestCatalog()
+	_, ok := books.GetBook(catalog, "fake-isbn-1234")
 	if ok {
 		t.Fatalf("want false (book not found), got true")
 	}
@@ -94,6 +114,7 @@ func TestGetBook_DoesNotFindTheBook(t *testing.T) {
 
 func TestAddBook_AddsNewBook(t *testing.T) {
 	t.Parallel()
+	catalog := getTestCatalog()
 	newBook := books.Book{
 		ID:     "fake1234",
 		Title:  "A fake book",
@@ -108,15 +129,15 @@ func TestAddBook_AddsNewBook(t *testing.T) {
 	// behavior or check)
 	// This condition ensures that AddBook actually changes the state, the postcondition
 	// only ensures the state is what we expect but what caused it to get to that state
-	_, ok := books.GetBook(newBook.ID)
+	_, ok := books.GetBook(catalog, newBook.ID)
 	if ok {
 		t.Fatalf("book with ID '%s' already exists", newBook.ID)
 	}
 
-	books.AddBook(newBook)
+	books.AddBook(catalog, newBook)
 
 	// postcondition
-	_, ok = books.GetBook(newBook.ID)
+	_, ok = books.GetBook(catalog, newBook.ID)
 	if !ok {
 		t.Fatalf("book with ID '%s' bot found, expected to find it", newBook.ID)
 	}
@@ -124,6 +145,7 @@ func TestAddBook_AddsNewBook(t *testing.T) {
 
 func TestAddBook_CannotReplaceExistingBook(t *testing.T) {
 	t.Parallel()
+	catalog := getTestCatalog()
 	newBook := books.Book{
 		ID:     "fake1234",
 		Title:  "A fake book",
@@ -131,12 +153,12 @@ func TestAddBook_CannotReplaceExistingBook(t *testing.T) {
 		Copies: 1,
 	}
 
-	err := books.AddBook(newBook)
+	err := books.AddBook(catalog, newBook)
 	if err != nil {
 		t.Fatal("cannot insert the test book")
 	}
 
-	err = books.AddBook(newBook)
+	err = books.AddBook(catalog, newBook)
 	if err == nil {
 		t.Fatal("want an error, got nil")
 	}
