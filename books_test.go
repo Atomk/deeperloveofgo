@@ -25,8 +25,8 @@ func getTestCatalog() map[string]books.Book {
 	}
 }
 
-// "BookToString formats book info as string"
-func TestBookToString_FormatsBookInfoAsString(t *testing.T) {
+// "ToString formats book info as string"
+func TestToString_FormatsBookInfoAsString(t *testing.T) {
 	t.Parallel()
 	input := books.Book{
 		Title:  "Artemis Fowl",
@@ -34,7 +34,7 @@ func TestBookToString_FormatsBookInfoAsString(t *testing.T) {
 		Copies: 3_000_000,
 	}
 	want := "Artemis Fowl by Eoin Colfer (3000000 copies sold)"
-	got := books.BookToString(input)
+	got := input.ToString()
 	if want != got {
 		// %q prints a string, inside double quotes as it's in the code
 		// (i.e. it shows escape sequences)

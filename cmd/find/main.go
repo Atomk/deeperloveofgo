@@ -20,5 +20,5 @@ func main() {
 		fmt.Printf("no book found with ID `%s`\n", bookID)
 		os.Exit(1)
 	}
-	fmt.Println(books.BookToString(book))
+	fmt.Println(books.ToString(book))
 }
