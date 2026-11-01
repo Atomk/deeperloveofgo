@@ -27,7 +27,8 @@ func main() {
 	// Statement = indicates to perform an action
 	//hello()
 
-	for _, book := range books.GetAllBooks() {
+	catalog := books.GetCatalog()
+	for _, book := range books.GetAllBooks(catalog) {
 		fmt.Println(books.BookToString(book))
 	}
 }

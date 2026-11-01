@@ -13,22 +13,25 @@ type Book struct {
 	Copies int
 }
 
-// catalog associates a book's ID with the corresponding Book instance.
-//
-// the type reads "map from string to Book"
-var catalog = map[string]Book{
-	"9788804497882": {
-		ID:     "9788804497882",
-		Title:  "Artemis Fowl",
-		Author: "Eoin Colfer",
-		Copies: 3_000_000,
-	},
-	"8879262920": {
-		ID:     "8879262920",
-		Title:  "Bolle di sapone",
-		Author: "Gianni Rodari",
-		Copies: 100_000,
-	},
+func GetCatalog() map[string]Book {
+	// catalog associates a book's ID with the corresponding Book instance.
+	//
+	// the type reads "map from string to Book"
+	var catalog = map[string]Book{
+		"9788804497882": {
+			ID:     "9788804497882",
+			Title:  "Artemis Fowl",
+			Author: "Eoin Colfer",
+			Copies: 3_000_000,
+		},
+		"8879262920": {
+			ID:     "8879262920",
+			Title:  "Bolle di sapone",
+			Author: "Gianni Rodari",
+			Copies: 100_000,
+		},
+	}
+	return catalog
 }
 
 /*
@@ -44,7 +47,7 @@ func BookToString(book Book) string {
 	return fmt.Sprintf("%v by %v (%v copies sold)", book.Title, book.Author, book.Copies)
 }
 
-func GetAllBooks() map[string]Book {
+func GetAllBooks(catalog map[string]Book) map[string]Book {
 	return catalog
 }
 
