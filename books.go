@@ -42,10 +42,11 @@ func printBook(book Book) {
 }
 */
 
+// String formats book info as a string.
 // Testable version of `printBook`.
 // A method for Book instances (Book values), as specified by setting a receiver
 // for the function.
-func (book Book) ToString() string {
+func (book Book) String() string {
 	return fmt.Sprintf("%v by %v (%v copies sold)", book.Title, book.Author, book.Copies)
 }
 

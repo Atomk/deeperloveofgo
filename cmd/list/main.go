@@ -29,7 +29,7 @@ func main() {
 
 	catalog := books.GetCatalog()
 	for _, book := range books.GetAllBooks(catalog) {
-		fmt.Println(book.ToString())
+		fmt.Println(book)
 	}
 }
 
@@ -41,7 +41,7 @@ func structsExample() {
 		Copies: 3_000_000,
 	}
 
-	fmt.Println(book.ToString())
+	fmt.Println(book)
 
 	poetryBook := books.Book{
 		Title:  "Bolle di sapone",
@@ -49,7 +49,7 @@ func structsExample() {
 		Copies: 100_000,
 	}
 
-	fmt.Println(poetryBook.ToString())
+	fmt.Println(poetryBook)
 }
 
 func slicesExample() {
