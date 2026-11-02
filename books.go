@@ -13,11 +13,13 @@ type Book struct {
 	Copies int
 }
 
-func GetCatalog() map[string]Book {
+type Catalog map[string]Book
+
+func GetCatalog() Catalog {
 	// catalog associates a book's ID with the corresponding Book instance.
 	//
 	// the type reads "map from string to Book"
-	var catalog = map[string]Book{
+	var catalog = Catalog{
 		"9788804497882": {
 			ID:     "9788804497882",
 			Title:  "Artemis Fowl",
@@ -54,7 +56,7 @@ func GetAllBooks(catalog map[string]Book) map[string]Book {
 	return catalog
 }
 
-func GetAllBooksAsSlice(catalog map[string]Book) []Book {
+func (catalog Catalog) GetAllBooksAsSlice() []Book {
 	// The long way 1
 	// booksSlice := make([]Book, len(catalog))
 	// i := 0
@@ -84,7 +86,7 @@ func GetAllBooksAsSlice(catalog map[string]Book) []Book {
 }
 
 // Uses the “comma, ok” pattern.
-func GetBook(catalog map[string]Book, ID string) (Book, bool) {
+func (catalog Catalog) GetBook(ID string) (Book, bool) {
 	// Long way
 	// This works on both slices and maps - they are similar in how they are used,
 	// you can think of a slice as a special case of maps where keys are consecutive
@@ -103,7 +105,7 @@ func GetBook(catalog map[string]Book, ID string) (Book, bool) {
 	return book, ok
 }
 
-func AddBook(catalog map[string]Book, book Book) error {
+func (catalog Catalog) AddBook(book Book) error {
 	_, ok := catalog[book.ID]
 	if ok {
 		return fmt.Errorf("a book with ID '%s' already exists in the catalog", book.ID)

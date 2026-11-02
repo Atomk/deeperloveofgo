@@ -8,8 +8,8 @@ import (
 	"testing"
 )
 
-func getTestCatalog() map[string]books.Book {
-	return map[string]books.Book{
+func getTestCatalog() books.Catalog {
+	return books.Catalog{
 		"9788804497882": {
 			ID:     "9788804497882",
 			Title:  "Artemis Fowl",
@@ -59,7 +59,7 @@ func TestGetAllBooksAsSlice_ReturnsCatalogBooks(t *testing.T) {
 		},
 	}
 
-	got := books.GetAllBooksAsSlice(catalog)
+	got := catalog.GetAllBooksAsSlice()
 	// A slice is an ordered sequence, while the iteration order of maps is not
 	// deterministic, as demonstrated by running this test multiple times without
 	// sorting the result:
@@ -93,7 +93,7 @@ func TestGetBook_FindsTheBook(t *testing.T) {
 		Author: "Gianni Rodari",
 		Copies: 100_000,
 	}
-	got, ok := books.GetBook(catalog, want.ID)
+	got, ok := catalog.GetBook(want.ID)
 	if !ok {
 		t.Fatalf("book not found")
 	}
@@ -105,7 +105,7 @@ func TestGetBook_FindsTheBook(t *testing.T) {
 func TestGetBook_DoesNotFindTheBook(t *testing.T) {
 	t.Parallel()
 	catalog := getTestCatalog()
-	_, ok := books.GetBook(catalog, "fake-isbn-1234")
+	_, ok := catalog.GetBook("fake-isbn-1234")
 	if ok {
 		t.Fatalf("want false (book not found), got true")
 	}
@@ -128,15 +128,15 @@ func TestAddBook_AddsNewBook(t *testing.T) {
 	// behavior or check)
 	// This condition ensures that AddBook actually changes the state, the postcondition
 	// only ensures the state is what we expect but what caused it to get to that state
-	_, ok := books.GetBook(catalog, newBook.ID)
+	_, ok := catalog.GetBook(newBook.ID)
 	if ok {
 		t.Fatalf("book with ID '%s' already exists", newBook.ID)
 	}
 
-	books.AddBook(catalog, newBook)
+	catalog.AddBook(newBook)
 
 	// postcondition
-	_, ok = books.GetBook(catalog, newBook.ID)
+	_, ok = catalog.GetBook(newBook.ID)
 	if !ok {
 		t.Fatalf("book with ID '%s' bot found, expected to find it", newBook.ID)
 	}
@@ -152,12 +152,12 @@ func TestAddBook_CannotReplaceExistingBook(t *testing.T) {
 		Copies: 1,
 	}
 
-	err := books.AddBook(catalog, newBook)
+	err := catalog.AddBook(newBook)
 	if err != nil {
 		t.Fatal("cannot insert the test book")
 	}
 
-	err = books.AddBook(catalog, newBook)
+	err = catalog.AddBook(newBook)
 	if err == nil {
 		t.Fatal("want an error, got nil")
 	}

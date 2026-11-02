@@ -15,7 +15,7 @@ func main() {
 
 	catalog := books.GetCatalog()
 	bookID := os.Args[1]
-	book, ok := books.GetBook(catalog, bookID)
+	book, ok := catalog.GetBook(bookID)
 	if !ok {
 		fmt.Printf("no book found with ID `%s`\n", bookID)
 		os.Exit(1)
