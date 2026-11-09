@@ -162,3 +162,18 @@ func TestAddBook_CannotReplaceExistingBook(t *testing.T) {
 		t.Fatal("want an error, got nil")
 	}
 }
+
+func TestSetCopies_SetsNumberOfCopiesToGivenValue(t *testing.T) {
+	book := books.Book{
+		ID:     "1234",
+		Title:  "Test Book",
+		Author: "Me",
+		Copies: 1,
+	}
+	want := 12
+	book.SetCopies(want)
+	got := book.Copies
+	if want != got {
+		t.Fatalf("want %d, got %d", want, got)
+	}
+}

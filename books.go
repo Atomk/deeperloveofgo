@@ -52,6 +52,18 @@ func (book Book) String() string {
 	return fmt.Sprintf("%v by %v (%v copies sold)", book.Title, book.Author, book.Copies)
 }
 
+// Using a pointer for the receiver allows to edit its values, otherwise the
+// method would just edit a copy of the book instance.
+// Now `book` is a "pointer to Book".
+func (book *Book) SetCopies(copies int) {
+	// Dereference the receiver to get to the original instance,
+	// and update the Copies field on that instance.
+	//   (*book).Copies = copies
+	// This is equivalent to the line below: dereference on structs is so common
+	// that Go can do it automatically.
+	book.Copies = copies
+}
+
 func GetAllBooks(catalog map[string]Book) map[string]Book {
 	return catalog
 }
