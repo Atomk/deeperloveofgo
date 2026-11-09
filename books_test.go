@@ -164,12 +164,8 @@ func TestAddBook_CannotReplaceExistingBook(t *testing.T) {
 }
 
 func TestSetCopies_SetsNumberOfCopiesToGivenValue(t *testing.T) {
-	book := books.Book{
-		ID:     "1234",
-		Title:  "Test Book",
-		Author: "Me",
-		Copies: 1,
-	}
+	t.Parallel()
+	book := books.Book{}
 	want := 12
 	book.SetCopies(want)
 	got := book.Copies
