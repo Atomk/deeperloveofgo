@@ -167,9 +167,30 @@ func TestSetCopies_SetsNumberOfCopiesToGivenValue(t *testing.T) {
 	t.Parallel()
 	book := books.Book{}
 	want := 12
-	book.SetCopies(want)
+	err := book.SetCopies(want)
+	if err != nil {
+		t.Fatal(err)
+	}
 	got := book.Copies
 	if want != got {
 		t.Fatalf("want %d, got %d", want, got)
+	}
+}
+
+func TestSetCopies_CanSetToZero(t *testing.T) {
+	t.Parallel()
+	book := books.Book{}
+	err := book.SetCopies(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestSetCopies_ReturnsErrorIfInputIsNegative(t *testing.T) {
+	t.Parallel()
+	book := books.Book{}
+	err := book.SetCopies(-1)
+	if err == nil {
+		t.Fatal("expected an error, got nil")
 	}
 }

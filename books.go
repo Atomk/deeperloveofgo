@@ -1,6 +1,7 @@
 package books
 
 import (
+	"errors"
 	"fmt"
 	"maps"
 	"slices"
@@ -55,13 +56,21 @@ func (book Book) String() string {
 // Using a pointer for the receiver allows to edit its values, otherwise the
 // method would just edit a copy of the book instance.
 // Now `book` is a "pointer to Book".
-func (book *Book) SetCopies(copies int) {
+func (book *Book) SetCopies(copies int) error {
+	if copies < 0 {
+		// Option 1
+		return errors.New("number of copies cannot be negative")
+		// Option 2
+		// return fmt.Errorf("negative number of copies: %d")
+	}
+
 	// Dereference the receiver to get to the original instance,
 	// and update the Copies field on that instance.
 	//   (*book).Copies = copies
 	// This is equivalent to the line below: dereference on structs is so common
 	// that Go can do it automatically.
 	book.Copies = copies
+	return nil
 }
 
 func GetAllBooks(catalog map[string]Book) map[string]Book {
